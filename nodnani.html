@@ -1,0 +1,11 @@
+<script>
+    var kalh = 0;
+
+    document.addEventListener("keydown", function(evt) {
+        if(!kalh) {
+            kalh = evt.timeStamp;
+        } else {
+            console.log(evt.timeStamp - kalh);
+        }
+    });
+</script>
