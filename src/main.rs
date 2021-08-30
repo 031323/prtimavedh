@@ -73,7 +73,35 @@ fn main() {
         })
         .collect();
 
+    for aksrm in aksrani.iter() {
+        println!("{}", aksrm.aksrm);
+    }
     assert_eq!(aksrani.len(), kalah.len());
+
+    let basantrani: Vec<(u32, String)> = aksrani
+        .iter()
+        .enumerate()
+        .filter(|(_, a)| a.basantrm != None)
+        .map(|(i, a)| {
+            (
+                if i == 0 { 0 } else { kalah[i - 1] },
+                a.basantrm.as_ref().unwrap().to_string(),
+            )
+        })
+        .collect();
+
+    fn fr(kalh: u32) -> String {
+        let kalh = kalh * 1000 / 60;
+        format!("00:{:02}:{:02},{:03}", kalh/1000/60, kalh/1000%60, kalh%1000).to_string()
+    }
+
+    let srt = (0..basantrani.len())
+        .fold(("".to_string(), "".to_string()), |(srt, ba), b| {
+            let ba = if ba == "" || ba.ends_with(".") {"".to_string()} else {ba + " "} + &basantrani[b].1[1..basantrani[b].1.len()-1];
+            (format!("{}{}\n{} --> {}\n{}\n\n", srt, b + 1, fr(basantrani[b].0), fr(if b < basantrani.len()-1 {basantrani[b+1].0} else {kalah[kalah.len()-1]}), ba), ba)
+        }).0;
+
+    std::fs::write(format!("{}.srt", suktkrmh), srt);
 
     let suktprtimah: Vec<(u32, String)> = aksrani
         .iter()
@@ -101,15 +129,21 @@ fn main() {
                             suktprtimah[p + 1].0
                         } else {
                             kalah[kalah.len() - 1]
-                        } - suktprtimah[p].0
+                        } - suktprtimah[p].0 - 1
                     ))
             },
         )
         .arg("-filter")
         .arg("crop")
         .arg("center=1")
+        .arg("-track")
+        .arg(format!("{}.mp3", suktkrmh))
+        .arg("in=0")
+        .arg(format!("out={}", kalah[kalah.len() - 1] - 1))
         .arg("-consumer")
-        .arg("avformat:out.avi")
+        .arg(format!("avformat:{}.mp4", suktkrmh))
+        .arg("acodec=libmp3lame")
+        .arg("vcodec=libx264")
         .arg(format!("width={}", gaurvm))
         .arg(format!("height={}", gaurvm))
         .spawn();

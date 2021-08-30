@@ -1,8 +1,8 @@
 description=Square
 frame_rate_num=60
 frame_rate_den=1
-width=4096
-height=4096
+width=1920
+height=1920
 progressive=1
 sample_aspect_num=1
 sample_aspect_den=1
