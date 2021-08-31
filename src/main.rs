@@ -23,6 +23,7 @@ fn main() {
     let kalah: Vec<u32> = std::fs::read_to_string(suktkrmh.to_string() + ".kalah")
         .expect(&(suktkrmh.to_string() + ".kalah"))
         .split("\n")
+        .filter(|s| !s.is_empty())
         .map(|s| s.parse::<u32>().unwrap() * 60 / 1000)
         .collect();
 

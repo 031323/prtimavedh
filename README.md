@@ -3,5 +3,5 @@
 [`MLT`](https://www.mltframework.org/) इत्ये॒तत् स्था॑प्यताम्। ततः॑
 
 ```
-cargo run --release -- suktani/5-24
+cargo run --release -- suktani/5-24 1920
 ```
